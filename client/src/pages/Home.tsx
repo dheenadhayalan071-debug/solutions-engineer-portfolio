@@ -36,7 +36,7 @@ function TiltCard({ children, className }: { children: React.ReactNode, classNam
   );
 }
 
-// --- DATA ---
+// --- DATA: EXPERIENCE ---
 const experience = [
   {
     company: "PolicyPath AI",
@@ -56,6 +56,7 @@ const experience = [
   }
 ];
 
+// --- DATA: TECH STACK ---
 const techStack = [
   { name: "React", icon: <Atom /> },
   { name: "Supabase", icon: <Database /> },
@@ -63,6 +64,15 @@ const techStack = [
   { name: "GitHub", icon: <Github /> },
   { name: "Vercel", icon: <Triangle /> },
   { name: "HTML/CSS", icon: <LayoutTemplate /> },
+];
+
+// --- DATA: METHODOLOGY ---
+const methodology = [
+  { title: "Clarify the Problem", desc: "Identify the core user need versus the technical want." },
+  { title: "Identify Constraints", desc: "Map failure modes, resource limits, and edge cases." },
+  { title: "Design Workflows", desc: "Create state-based logic flows before writing code." },
+  { title: "Define Trade-offs", desc: "Consciously choose speed vs. accuracy or scope vs. scale." },
+  { title: "Explain & Execute", desc: "A solution is only valid if it can be clearly communicated." },
 ];
 
 export default function Home() {
@@ -243,6 +253,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* --- METHODOLOGY (Restored) --- */}
+      <section className="py-32 px-6 bg-black/40">
+        <div className="container max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-16 text-white">How I Design Solutions</h2>
+          <div className="grid gap-6">
+            {methodology.map((step, i) => (
+              <div key={i} className="flex items-center gap-6 group text-left p-6 rounded-xl bg-white/5 border border-white/5 hover:border-cyan-500/30 hover:bg-white/10 transition-all">
+                <span className="font-mono text-5xl font-bold text-white/10 group-hover:text-cyan-500/50 transition-colors">0{i+1}</span>
+                <div>
+                  <h3 className="font-bold text-xl text-white group-hover:text-cyan-400 transition-colors mb-2">{step.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-20 p-8 border border-dashed border-white/20 rounded-2xl inline-block bg-black/40 backdrop-blur-md">
+            <p className="font-display text-xl text-gray-300 italic">
+              "A solution is only useful if it can be explained, defended, and executed."
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* --- FOOTER --- */}
       <footer className="py-12 border-t border-white/10 bg-[#02000d] text-center relative z-10">
         <div className="flex justify-center gap-8 mb-8">
@@ -257,3 +291,4 @@ export default function Home() {
     </div>
   );
 }
+
