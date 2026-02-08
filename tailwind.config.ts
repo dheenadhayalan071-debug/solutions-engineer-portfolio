@@ -11,103 +11,54 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        // --- FUTURISTIC PALETTE ---
-        background: "#050505", // Deep Void Black
-        foreground: "#e0e0e0", // Soft Gray text
+        background: "#030014", // Darker Navy-Black (Better contrast than pure black)
+        foreground: "#ffffff", // Pure White text
         
-        // Neon Accents
+        // High-Voltage Neon
         cyan: {
           DEFAULT: "#00f3ff",
+          glow: "rgba(0, 243, 255, 0.6)",
           dim: "rgba(0, 243, 255, 0.1)",
-          glow: "rgba(0, 243, 255, 0.5)",
         },
         purple: {
-          DEFAULT: "#bc13fe",
-          dim: "rgba(188, 19, 254, 0.1)",
-          glow: "rgba(188, 19, 254, 0.5)",
+          DEFAULT: "#bd00ff",
+          glow: "rgba(189, 0, 255, 0.6)",
+          dim: "rgba(189, 0, 255, 0.1)",
         },
-
-        // UI Elements
         card: {
-          DEFAULT: "rgba(15, 15, 15, 0.6)", // Glass effect
-          foreground: "#ffffff",
+          DEFAULT: "rgba(255, 255, 255, 0.03)", // Lighter glass
           border: "rgba(255, 255, 255, 0.1)",
         },
-        primary: {
-          DEFAULT: "#00f3ff", // Cyan Primary
-          foreground: "#000000",
-        },
-        secondary: {
-          DEFAULT: "#bc13fe", // Purple Secondary
-          foreground: "#ffffff",
-        },
-        muted: {
-          DEFAULT: "rgba(255, 255, 255, 0.05)",
-          foreground: "#a3a3a3",
-        },
-        accent: {
-          DEFAULT: "rgba(0, 243, 255, 0.1)",
-          foreground: "#00f3ff",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        border: "rgba(255, 255, 255, 0.1)",
-        input: "rgba(255, 255, 255, 0.05)",
-        ring: "#00f3ff",
       },
       fontFamily: {
         sans: ["Space Grotesk", "sans-serif"], 
-        display: ["Orbitron", "sans-serif"], // For Headers
-        mono: ["JetBrains Mono", "monospace"], // For Code blocks
+        display: ["Orbitron", "sans-serif"], 
+        mono: ["JetBrains Mono", "monospace"], 
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        "gradient-x": {
+          "0%, 100%": { "background-position": "0% 50%" },
+          "50%": { "background-position": "100% 50%" },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-        // --- CUSTOM ANIMATIONS ---
-        "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 5px var(--tw-shadow-color), 0 0 10px var(--tw-shadow-color)" },
-          "50%": { boxShadow: "0 0 20px var(--tw-shadow-color), 0 0 30px var(--tw-shadow-color)" },
+        "scroll": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
-        "scanline": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100%)" },
+        "meteor": {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": { transform: "rotate(215deg) translateX(-500px)", opacity: "0" },
         },
-        // THIS WAS MISSING:
-        "gradient-x": {
-          "0%, 100%": {
-             "background-size": "200% 200%",
-             "background-position": "left center"
-          },
-          "50%": {
-             "background-size": "200% 200%",
-             "background-position": "right center"
-          }
-        },
-        "scroll": {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        }
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-cyan": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "gradient-x": "gradient-x 5s ease infinite",
+        "scroll": "scroll 20s linear infinite",
         "float": "float 4s ease-in-out infinite",
-        "scanline": "scanline 8s linear infinite",
-        "gradient-x": "gradient-x 15s ease infinite", // Added this
-        "scroll": "scroll 20s linear infinite", // Added this for the marquee
+        "meteor": "meteor 5s linear infinite",
       },
     },
   },
