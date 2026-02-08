@@ -58,7 +58,6 @@ export default {
         ring: "#00f3ff",
       },
       fontFamily: {
-        // We will import these in CSS next
         sans: ["Space Grotesk", "sans-serif"], 
         display: ["Orbitron", "sans-serif"], // For Headers
         mono: ["JetBrains Mono", "monospace"], // For Code blocks
@@ -72,7 +71,7 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        // Custom Sci-Fi Animations
+        // --- CUSTOM ANIMATIONS ---
         "pulse-glow": {
           "0%, 100%": { boxShadow: "0 0 5px var(--tw-shadow-color), 0 0 10px var(--tw-shadow-color)" },
           "50%": { boxShadow: "0 0 20px var(--tw-shadow-color), 0 0 30px var(--tw-shadow-color)" },
@@ -84,6 +83,21 @@ export default {
         "scanline": {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(100%)" },
+        },
+        // THIS WAS MISSING:
+        "gradient-x": {
+          "0%, 100%": {
+             "background-size": "200% 200%",
+             "background-position": "left center"
+          },
+          "50%": {
+             "background-size": "200% 200%",
+             "background-position": "right center"
+          }
+        },
+        "scroll": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         }
       },
       animation: {
@@ -92,6 +106,8 @@ export default {
         "pulse-cyan": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "float": "float 4s ease-in-out infinite",
         "scanline": "scanline 8s linear infinite",
+        "gradient-x": "gradient-x 15s ease infinite", // Added this
+        "scroll": "scroll 20s linear infinite", // Added this for the marquee
       },
     },
   },
