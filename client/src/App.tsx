@@ -1,326 +1,251 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Link } from "wouter";
 import { 
-  Atom, 
-  Database, 
-  Zap, 
-  Github, 
-  Triangle, 
-  LayoutTemplate, 
-  ChevronRight, 
-  ExternalLink, 
-  Cpu, 
-  Layers, 
-  AlertTriangle,
-  FileText,
-  Linkedin,
-  Mail
+  Atom, Database, Zap, Github, Triangle, LayoutTemplate, 
+  ChevronRight, FileText, Linkedin, Mail, ExternalLink, Layers 
 } from "lucide-react";
+import React from "react";
 
-// --- DATA: EXPERIENCE ---
+// --- 3D TILT CARD COMPONENT ---
+// This makes the cards move in 3D when you hover over them
+function TiltCard({ children, className }: { children: React.ReactNode, className?: string }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useSpring(x, { stiffness: 500, damping: 50 });
+  const mouseY = useSpring(y, { stiffness: 500, damping: 50 });
+
+  function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    x.set(clientX - left - width / 2);
+    y.set(clientY - top - height / 2);
+  }
+
+  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]); // Tilt X
+  const rotateY = useTransform(mouseX, [-300, 300], [-15, 15]); // Tilt Y
+
+  return (
+    <motion.div
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
+      className={`relative transform-gpu transition-all duration-200 ${className}`}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// --- DATA ---
 const experience = [
   {
     company: "PolicyPath AI",
-    role: "Solutions Engineer (Product & Systems)",
+    link: "https://policy-path-theta.vercel.app/",
+    role: "Solutions Engineer",
     period: "Jan 2026 – Present",
     summary: "Designed end-to-end solution workflows for an AI-driven learning platform.",
-    points: [
-      "Designed system workflows governing user progression, evaluation rules, and edge-case handling.",
-      "Defined constraints and trade-offs to balance accuracy, reliability, and delivery speed.",
-      "Communicated solution logic and system behavior clearly to peers during development."
-    ]
+    points: ["Designed system workflows.", "Defined constraints for accuracy vs speed."]
   },
   {
     company: "NexGen Capital Lab",
-    role: "Founder & Solutions Engineer",
+    link: "https://nexgen-capital-lab.vercel.app/",
+    role: "Founder & Engineer",
     period: "Nov 2025 – Present",
-    summary: "Translating abstract ideas into concrete workflows and execution logic.",
-    points: [
-      "Designed solution architectures and workflows before implementation to ensure feasibility.",
-      "Explained system behavior, rules, and trade-offs to non-technical stakeholders.",
-      "Guided execution by aligning implementation decisions with system constraints."
-    ]
+    summary: "Translating abstract ideas into concrete workflows.",
+    points: ["Designed architectures before coding.", "Guided execution with strict constraints."]
   }
 ];
 
-// --- DATA: TECH STACK ---
 const techStack = [
-  { name: "React", icon: <Atom className="w-6 h-6" /> },
-  { name: "Supabase", icon: <Database className="w-6 h-6" /> },
-  { name: "FastAPI", icon: <Zap className="w-6 h-6" /> },
-  { name: "GitHub", icon: <Github className="w-6 h-6" /> },
-  { name: "Vercel", icon: <Triangle className="w-6 h-6" /> },
-  { name: "HTML/CSS", icon: <LayoutTemplate className="w-6 h-6" /> },
-];
-
-// --- DATA: METHODOLOGY ---
-const methodology = [
-  { title: "Clarify the Problem", desc: "Identify the core user need versus the technical want." },
-  { title: "Identify Constraints", desc: "Map failure modes, resource limits, and edge cases." },
-  { title: "Design Workflows", desc: "Create state-based logic flows before writing code." },
-  { title: "Define Trade-offs", desc: "Consciously choose speed vs. accuracy or scope vs. scale." },
-  { title: "Explain & Execute", desc: "A solution is only valid if it can be clearly communicated." },
+  { name: "React", icon: <Atom /> },
+  { name: "Supabase", icon: <Database /> },
+  { name: "FastAPI", icon: <Zap /> },
+  { name: "GitHub", icon: <Github /> },
+  { name: "Vercel", icon: <Triangle /> },
+  { name: "HTML/CSS", icon: <LayoutTemplate /> },
 ];
 
 export default function Home() {
-  const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false);
-
   return (
-    <div className="min-h-screen text-foreground font-sans selection:bg-cyan-500/20">
+    <div className="min-h-screen font-sans overflow-x-hidden selection:bg-purple-500/30">
       
       {/* --- HERO SECTION --- */}
-      <section className="relative min-h-[90vh] flex items-center justify-center px-6 overflow-hidden">
-        <div className="container max-w-6xl grid lg:grid-cols-2 gap-12 items-center z-10">
+      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
+        {/* Animated Background Mesh */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/20 rounded-full blur-[120px] animate-float" />
+        </div>
+
+        <div className="container max-w-7xl grid lg:grid-cols-2 gap-16 items-center z-10">
           
           {/* Text Content */}
-          <div className="order-2 lg:order-1 space-y-6">
+          <div className="order-2 lg:order-1 space-y-8">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-cyan-400 font-mono tracking-widest text-sm mb-2">
-                // SYSTEM_READY
-              </h2>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-gray-400 mb-2">
-                <GlitchText text="DHEENA" /> <br />
-                <GlitchText text="DHAYALAN" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 font-mono text-xs mb-6 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"/> SYSTEM_ONLINE
+              </div>
+
+              {/* NAME - Fixed to be always visible with auto-animation */}
+              <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-4 leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                DHEENA <br /> 
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600 animate-gradient-x">
+                  DHAYALAN
+                </span>
               </h1>
-              <h2 className="text-2xl md:text-3xl font-display text-gray-400 mb-6">
-                Solutions Engineer <span className="text-purple-500">|</span> Product Systems
+              
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-300 mb-8 flex items-center gap-3">
+                <span className="w-8 h-1 bg-cyan-500 rounded-full"/> Solutions Engineer
               </h2>
-              <p className="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed border-l-2 border-cyan-500/50 pl-6">
-                I design and explain technical systems that bridge product intent, 
-                real-world constraints, and reliable execution.
+              
+              <p className="text-xl text-gray-300 max-w-xl leading-relaxed font-medium">
+                I bridge the gap between <span className="text-white border-b border-cyan-500">product intent</span> and <span className="text-white border-b border-purple-500">reliable execution</span>.
               </p>
               
-              <div className="flex gap-4 pt-6">
-                <a href="#projects" className="px-6 py-3 bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 font-mono hover:bg-cyan-500 hover:text-black transition-all duration-300">
+              <div className="flex flex-wrap gap-4 pt-8">
+                <a href="#projects" className="relative group px-8 py-4 bg-cyan-500 text-black font-bold font-mono overflow-hidden rounded">
+                  <span className="absolute inset-0 w-full h-full bg-white/30 transform translate-x-[-100%] skew-x-12 group-hover:translate-x-[100%] transition-transform duration-500"/>
                   View Solutions
                 </a>
-                <a href="/resume.pdf" target="_blank" className="px-6 py-3 border border-gray-700 text-gray-400 font-mono hover:border-white hover:text-white transition-all duration-300 flex items-center gap-2">
+                <a href="/resume.pdf" target="_blank" className="px-8 py-4 border border-white/20 text-white font-mono hover:bg-white/10 transition-all rounded flex items-center gap-2">
                   <FileText className="w-4 h-4" /> Resume
                 </a>
               </div>
             </motion.div>
           </div>
 
-          {/* Headshot Visual */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end relative">
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
-              {/* Rotating Rings */}
-              <div className="absolute inset-0 border-2 border-dashed border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite]" />
-              <div className="absolute -inset-4 border border-purple-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-              
-              {/* Image Container (Hexagon-ish clip or circle) */}
-              <div className="absolute inset-2 rounded-full overflow-hidden border-2 border-cyan-500/50 bg-black/50 backdrop-blur-sm z-10">
-                 {/* Make sure 1000353873.png is in your public folder */}
-                <img 
-                  src="/1000353873.png" 
-                  alt="Dheena Dhayalan" 
-                  className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity grayscale hover:grayscale-0"
-                />
-              </div>
-            </div>
+          {/* REACTOR PHOTO - Color & Spinning Rings */}
+          <div className="order-1 lg:order-2 flex justify-center relative perspective-1000">
+             <TiltCard className="w-80 h-80 md:w-96 md:h-96">
+                {/* Spinning Reactor Rings */}
+                <div className="absolute inset-[-20px] border-2 border-dashed border-cyan-500/40 rounded-full animate-[spin_10s_linear_infinite]" />
+                <div className="absolute inset-[-10px] border border-purple-500/40 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+                
+                {/* Glowing Core Image */}
+                <div className="absolute inset-0 rounded-full overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(0,243,255,0.2)] bg-black">
+                   <img 
+                    src="/1000353873.png" 
+                    alt="Dheena Dhayalan" 
+                    className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                  />
+                </div>
+             </TiltCard>
           </div>
         </div>
       </section>
 
-      {/* --- TECH STACK MARQUEE --- */}
-      <section className="py-12 border-y border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 mb-4">
-          <h3 className="text-sm font-mono text-gray-500 uppercase tracking-widest mb-2">:: Tech Stack ::</h3>
-        </div>
-        <div className="relative flex overflow-hidden group">
-          <div className="flex gap-12 animate-scroll whitespace-nowrap px-12">
+      {/* --- TECH MARQUEE --- */}
+      <section className="py-16 bg-black/60 border-y border-white/5 backdrop-blur-md">
+        <div className="flex overflow-hidden group">
+          <div className="flex gap-16 animate-scroll whitespace-nowrap px-16">
             {[...techStack, ...techStack, ...techStack].map((tech, i) => (
-              <div key={i} className="flex items-center gap-3 text-gray-400 group-hover:text-cyan-400 transition-colors">
-                {tech.icon}
-                <span className="font-display font-bold text-xl tracking-wider">{tech.name}</span>
+              <div key={i} className="flex items-center gap-4 text-gray-500 group-hover:text-white transition-colors duration-300">
+                <span className="text-cyan-500">{tech.icon}</span>
+                <span className="font-display font-bold text-2xl tracking-widest uppercase">{tech.name}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* --- EXPERIENCE SECTION --- */}
-      <section className="py-24 px-6 relative">
-        <div className="container max-w-4xl mx-auto">
-          <h2 className="text-4xl font-display font-bold mb-16 flex items-center gap-4">
-            <span className="w-8 h-1 bg-purple-500"></span> EXPERIENCE
-          </h2>
+      {/* --- EXPERIENCE (3D CARDS) --- */}
+      <section className="py-32 px-6">
+        <div className="container max-w-6xl mx-auto">
+          <h2 className="text-5xl font-black text-white mb-20 text-center">EXPERIENCE <span className="text-purple-500">.</span></h2>
           
-          <div className="space-y-12 relative border-l border-white/10 ml-3 md:ml-0 pl-8 md:pl-0">
+          <div className="grid md:grid-cols-2 gap-8">
             {experience.map((job, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="relative md:grid md:grid-cols-[1fr_2px_1fr] gap-8 items-start group"
-              >
-                {/* Date (Left on Desktop) */}
-                <div className="hidden md:block text-right pt-1">
-                  <span className="font-mono text-cyan-500/80 text-sm">{job.period}</span>
+              <TiltCard key={index} className="group">
+                <div className="h-full bg-white/5 border border-white/10 p-10 rounded-2xl backdrop-blur-sm hover:bg-white/10 hover:border-cyan-500/50 transition-all shadow-2xl">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                       <h3 className="text-3xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{job.company}</h3>
+                       <p className="text-purple-400 font-mono text-sm">{job.role}</p>
+                    </div>
+                    {/* Live Site Link Button */}
+                    <a href={job.link} target="_blank" className="p-3 bg-white/5 rounded-full hover:bg-cyan-500 hover:text-black transition-all" title="Visit Live Site">
+                      <ExternalLink className="w-5 h-5" />
+                    </a>
+                  </div>
+                  <p className="text-gray-300 mb-6 leading-relaxed">{job.summary}</p>
+                  <div className="space-y-2">
+                     {job.points.map((pt, i) => (
+                       <div key={i} className="flex items-center gap-3 text-sm text-gray-400">
+                         <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full" /> {pt}
+                       </div>
+                     ))}
+                  </div>
                 </div>
-
-                {/* Timeline Node */}
-                <div className="absolute md:relative left-[-37px] md:left-0 top-2 w-3 h-3 bg-black border border-purple-500 rounded-full group-hover:bg-purple-500 group-hover:shadow-[0_0_10px_#bc13fe] transition-all duration-300 z-10" />
-
-                {/* Content */}
-                <div className="pb-8">
-                  <div className="md:hidden font-mono text-cyan-500/80 text-sm mb-1">{job.period}</div>
-                  <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">{job.company}</h3>
-                  <h4 className="text-lg text-gray-400 mb-4">{job.role}</h4>
-                  <p className="text-gray-300 italic mb-4 border-l-2 border-white/10 pl-4">{job.summary}</p>
-                  <ul className="space-y-2">
-                    {job.points.map((pt, i) => (
-                      <li key={i} className="text-gray-500 text-sm leading-relaxed flex items-start gap-2">
-                        <span className="text-purple-500 mt-1">›</span> {pt}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
+              </TiltCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* --- PROJECTS / CASE STUDY --- */}
-      <section id="projects" className="py-24 px-6 bg-gradient-to-b from-transparent to-purple-900/5">
-        <div className="container max-w-5xl mx-auto">
-          <h2 className="text-4xl font-display font-bold mb-16 flex items-center gap-4">
-            <span className="w-8 h-1 bg-cyan-500"></span> FEATURED SYSTEM
-          </h2>
-
-          <div className="grid md:grid-cols-1 gap-8">
-            {/* --- SCWN Card --- */}
-            <motion.div 
-              layout 
-              className={`bg-card/50 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md transition-colors ${isCaseStudyOpen ? 'border-cyan-500/30' : 'hover:border-white/20'}`}
-            >
-              <motion.div layout className="p-8">
-                <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-                  <div>
-                    <div className="flex gap-3 mb-3">
-                      <span className="px-3 py-1 text-xs font-mono rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">System Design</span>
-                      <span className="px-3 py-1 text-xs font-mono rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">Visualization</span>
-                    </div>
-                    <h3 className="text-3xl font-bold text-white mb-2">Smart City Waste Nodes (SCWN)</h3>
-                    <p className="text-gray-400">National Hackathon – 2nd Overall Runner-Up</p>
-                  </div>
-                  <button 
-                    onClick={() => setIsCaseStudyOpen(!isCaseStudyOpen)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-cyan-500 hover:text-black rounded-lg transition-all text-sm font-mono border border-white/10"
-                  >
-                    {isCaseStudyOpen ? "Close Analysis" : "View Case Study"} <ChevronRight className={`w-4 h-4 transition-transform ${isCaseStudyOpen ? 'rotate-90' : ''}`} />
-                  </button>
-                </div>
-
-                <motion.p layout className="text-xl text-gray-300 font-light leading-relaxed mb-6">
-                  A system-level waste management solution designed around real-world constraints, state-based logic, and city-scale visualization.
-                </motion.p>
-
-                {/* --- EXPANDABLE CONTENT --- */}
-                <AnimatePresence>
-                  {isCaseStudyOpen && (
-                    <motion.div 
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="border-t border-white/10 pt-8 mt-8 grid md:grid-cols-2 gap-12"
-                    >
-                      <div className="space-y-8">
-                        <div>
-                          <h4 className="flex items-center gap-2 text-cyan-400 font-bold mb-3"><AlertTriangle className="w-5 h-5"/> The Problem</h4>
-                          <p className="text-gray-400 text-sm leading-relaxed">
-                            Urban waste management involves unreliable inputs and multiple stakeholders. Traditional solutions ignore failure states. We needed a system that handles "messy" real-world data gracefully.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="flex items-center gap-2 text-purple-400 font-bold mb-3"><Cpu className="w-5 h-5"/> System Design</h4>
-                          <p className="text-gray-400 text-sm leading-relaxed">
-                            We modeled waste bins as "Nodes" with specific states (Normal, Warning, Full, Fallback). This state-based logic allows the system to function even if continuous connectivity fails.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-8">
-                        <div>
-                          <h4 className="flex items-center gap-2 text-white font-bold mb-3"><Layers className="w-5 h-5"/> Key Decisions</h4>
-                          <ul className="space-y-3 text-sm text-gray-400">
-                            <li className="flex gap-2"><span className="text-cyan-500">01.</span> Chose discrete states over real-time streaming to handle poor network conditions.</li>
-                            <li className="flex gap-2"><span className="text-cyan-500">02.</span> Prioritized "City-Level" health visualization over raw data tables for clearer decision-making.</li>
-                          </ul>
-                        </div>
-                        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                          <h5 className="font-mono text-xs text-gray-500 uppercase mb-2">Outcome</h5>
-                          <p className="text-white text-sm">
-                            Awarded 2nd Runner-Up for justifying system architecture and real-world feasibility to judges.
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            </motion.div>
+      {/* --- FEATURED PROJECT (HOVER REVEAL) --- */}
+      <section id="projects" className="py-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-900/10 pointer-events-none" />
+        
+        <div className="container max-w-6xl mx-auto relative z-10">
+          <div className="flex items-end justify-between mb-12">
+             <h2 className="text-5xl font-black text-white">FEATURED SYSTEM</h2>
+             <span className="hidden md:block font-mono text-cyan-500">// 01</span>
           </div>
-        </div>
-      </section>
 
-      {/* --- METHODOLOGY --- */}
-      <section className="py-24 px-6">
-        <div className="container max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">How I Design Solutions</h2>
-          <div className="grid gap-6">
-            {methodology.map((step, i) => (
-              <div key={i} className="flex items-center gap-6 group text-left p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
-                <span className="font-mono text-4xl font-bold text-white/10 group-hover:text-cyan-500/50 transition-colors">0{i+1}</span>
-                <div>
-                  <h3 className="font-bold text-lg text-white group-hover:text-cyan-400 transition-colors">{step.title}</h3>
-                  <p className="text-sm text-gray-500">{step.desc}</p>
+          <Link href="/project/scwn">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="group cursor-pointer relative bg-black/40 border border-white/10 rounded-3xl overflow-hidden"
+            >
+              {/* Glowing Border Gradient on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+              
+              <div className="grid md:grid-cols-2 gap-12 p-12 items-center">
+                <div className="space-y-6">
+                   <div className="flex gap-3">
+                      <span className="px-4 py-1.5 rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider">System Design</span>
+                      <span className="px-4 py-1.5 rounded-full border border-purple-500/30 text-purple-400 text-xs font-bold uppercase tracking-wider">Awards</span>
+                   </div>
+                   <h3 className="text-4xl md:text-5xl font-black text-white leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">
+                     Smart City <br/> Waste Nodes
+                   </h3>
+                   <p className="text-xl text-gray-400 leading-relaxed">
+                     A state-based waste management system designed to handle unreliable network conditions.
+                   </p>
+                   <div className="flex items-center gap-3 text-cyan-400 font-bold mt-4 group-hover:translate-x-2 transition-transform">
+                     View Case Study <ChevronRight />
+                   </div>
+                </div>
+                
+                {/* Visual Representation (Abstract System Map) */}
+                <div className="relative h-64 md:h-full min-h-[300px] bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden">
+                   {/* Abstract Nodes */}
+                   <div className="absolute w-3 h-3 bg-green-500 rounded-full top-1/4 left-1/4 animate-ping" />
+                   <div className="absolute w-3 h-3 bg-red-500 rounded-full bottom-1/3 right-1/3 animate-ping delay-75" />
+                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+                   <Layers className="w-24 h-24 text-white/20 group-hover:text-cyan-500/50 group-hover:scale-110 transition-all duration-500" />
                 </div>
               </div>
-            ))}
-          </div>
-          
-          <div className="mt-16 p-8 border border-dashed border-white/20 rounded-2xl inline-block">
-            <p className="font-display text-xl text-gray-300">
-              "A solution is only useful if it can be explained, defended, and executed."
-            </p>
-          </div>
+            </motion.div>
+          </Link>
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="py-12 border-t border-white/10 bg-black text-center">
+      <footer className="py-12 border-t border-white/10 bg-[#02000d] text-center relative z-10">
         <div className="flex justify-center gap-8 mb-8">
-          <a href="https://github.com" className="p-3 bg-white/5 rounded-full hover:bg-cyan-500 hover:text-black transition-all"><Github className="w-5 h-5"/></a>
-          <a href="https://linkedin.com" className="p-3 bg-white/5 rounded-full hover:bg-purple-500 hover:text-white transition-all"><Linkedin className="w-5 h-5"/></a>
-          <a href="mailto:dheenadhayalan071@gmail.com" className="p-3 bg-white/5 rounded-full hover:bg-white hover:text-black transition-all"><Mail className="w-5 h-5"/></a>
+          <a href="https://github.com" className="p-4 bg-white/5 rounded-xl hover:bg-cyan-500 hover:text-black hover:-translate-y-1 transition-all"><Github className="w-6 h-6"/></a>
+          <a href="https://linkedin.com" className="p-4 bg-white/5 rounded-xl hover:bg-purple-500 hover:text-white hover:-translate-y-1 transition-all"><Linkedin className="w-6 h-6"/></a>
+          <a href="mailto:dheenadhayalan071@gmail.com" className="p-4 bg-white/5 rounded-xl hover:bg-white hover:text-black hover:-translate-y-1 transition-all"><Mail className="w-6 h-6"/></a>
         </div>
-        <p className="text-gray-600 font-mono text-xs">
+        <p className="text-gray-500 font-mono text-xs">
           © 2026 DHEENA DHAYALAN . SYSTEM STATUS: ONLINE
         </p>
       </footer>
-
     </div>
   );
-}
-
-// Helper for Glitch Effect (Simple CSS Jitter)
-function GlitchText({ text }: { text: string }) {
-  return (
-    <span className="relative inline-block group">
-      <span className="relative z-10">{text}</span>
-      <span className="absolute top-0 left-0 -z-10 w-full h-full text-cyan-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-[2px] transition-all duration-100 select-none">
-        {text}
-      </span>
-      <span className="absolute top-0 left-0 -z-10 w-full h-full text-purple-500 opacity-0 group-hover:opacity-100 group-hover:-translate-x-[2px] transition-all duration-100 select-none">
-        {text}
-      </span>
-    </span>
-  );
-}
+                  }
