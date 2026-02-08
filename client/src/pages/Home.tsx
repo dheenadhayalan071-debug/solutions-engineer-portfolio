@@ -2,9 +2,9 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "wouter";
 import { 
   Atom, Database, Zap, Github, Triangle, LayoutTemplate, 
-  ChevronRight, FileText, Linkedin, Mail, ExternalLink, Layers, MousePointer2 
+  ChevronRight, FileText, Linkedin, Mail, ExternalLink, Layers 
 } from "lucide-react";
-import React, { useRef } from "react";
+import React from "react";
 
 // --- 3D TILT CARD COMPONENT ---
 function TiltCard({ children, className }: { children: React.ReactNode, className?: string }) {
@@ -20,7 +20,7 @@ function TiltCard({ children, className }: { children: React.ReactNode, classNam
     y.set(clientY - top - height / 2);
   }
 
-  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]); // Reverse for natural tilt
+  const rotateX = useTransform(mouseY, [-300, 300], [15, -15]);
   const rotateY = useTransform(mouseX, [-300, 300], [-15, 15]);
 
   return (
@@ -70,7 +70,6 @@ export default function Home() {
       
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
-        {/* Animated Background Mesh */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[120px] animate-pulse" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/20 rounded-full blur-[120px] animate-float" />
@@ -78,7 +77,6 @@ export default function Home() {
 
         <div className="container max-w-7xl grid lg:grid-cols-2 gap-16 items-center z-10">
           
-          {/* Text Content */}
           <div className="order-2 lg:order-1 space-y-8">
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
@@ -116,14 +114,10 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* REACTOR PHOTO */}
           <div className="order-1 lg:order-2 flex justify-center relative perspective-1000">
              <TiltCard className="w-80 h-80 md:w-96 md:h-96">
-                {/* Spinning Reactor Rings */}
                 <div className="absolute inset-[-20px] border-2 border-dashed border-cyan-500/40 rounded-full animate-[spin_10s_linear_infinite]" />
                 <div className="absolute inset-[-10px] border border-purple-500/40 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-                
-                {/* Glowing Core Image */}
                 <div className="absolute inset-0 rounded-full overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(0,243,255,0.2)] bg-black">
                    <img 
                     src="/1000353873.png" 
@@ -136,7 +130,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- TECH MARQUEE --- */}
+      {/* --- MARQUEE --- */}
       <section className="py-16 bg-black/60 border-y border-white/5 backdrop-blur-md">
         <div className="flex overflow-hidden group">
           <div className="flex gap-16 animate-scroll whitespace-nowrap px-16">
@@ -150,11 +144,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- EXPERIENCE (3D CARDS) --- */}
+      {/* --- EXPERIENCE --- */}
       <section className="py-32 px-6">
         <div className="container max-w-6xl mx-auto">
           <h2 className="text-5xl font-black text-white mb-20 text-center">EXPERIENCE <span className="text-purple-500">.</span></h2>
-          
           <div className="grid md:grid-cols-2 gap-8">
             {experience.map((job, index) => (
               <TiltCard key={index} className="group">
@@ -183,10 +176,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- FEATURED PROJECT (HOVER REVEAL) --- */}
+      {/* --- FEATURED PROJECT --- */}
       <section id="projects" className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-900/10 pointer-events-none" />
-        
         <div className="container max-w-6xl mx-auto relative z-10">
           <div className="flex items-end justify-between mb-12">
              <h2 className="text-5xl font-black text-white">FEATURED SYSTEM</h2>
@@ -198,9 +190,7 @@ export default function Home() {
               whileHover={{ scale: 1.02 }}
               className="group cursor-pointer relative bg-black/40 border border-white/10 rounded-3xl overflow-hidden"
             >
-              {/* Glowing Border Gradient on Hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
-              
               <div className="grid md:grid-cols-2 gap-12 p-12 items-center">
                 <div className="space-y-6">
                    <div className="flex gap-3">
@@ -217,10 +207,7 @@ export default function Home() {
                      View Case Study <ChevronRight />
                    </div>
                 </div>
-                
-                {/* Visual Representation (Abstract System Map) */}
                 <div className="relative h-64 md:h-full min-h-[300px] bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden">
-                   {/* Abstract Nodes */}
                    <div className="absolute w-3 h-3 bg-green-500 rounded-full top-1/4 left-1/4 animate-ping" />
                    <div className="absolute w-3 h-3 bg-red-500 rounded-full bottom-1/3 right-1/3 animate-ping delay-75" />
                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
