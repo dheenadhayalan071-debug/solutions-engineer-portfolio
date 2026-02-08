@@ -2,7 +2,8 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "wouter";
 import { 
   Atom, Database, Zap, Github, Triangle, LayoutTemplate, 
-  ChevronRight, FileText, Linkedin, Mail, ExternalLink, Layers 
+  ChevronRight, FileText, Linkedin, Mail, ExternalLink, Layers,
+  Trash2, Wifi 
 } from "lucide-react";
 import React from "react";
 
@@ -130,8 +131,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- MARQUEE --- */}
+      {/* --- TECH MARQUEE (SKILLS) --- */}
       <section className="py-16 bg-black/60 border-y border-white/5 backdrop-blur-md">
+        <div className="text-center mb-8">
+          <h3 className="font-mono text-cyan-400 tracking-[0.5em] text-sm animate-pulse">
+            // TECHNICAL ARSENAL
+          </h3>
+        </div>
+        
         <div className="flex overflow-hidden group">
           <div className="flex gap-16 animate-scroll whitespace-nowrap px-16">
             {[...techStack, ...techStack, ...techStack].map((tech, i) => (
@@ -207,11 +214,28 @@ export default function Home() {
                      View Case Study <ChevronRight />
                    </div>
                 </div>
-                <div className="relative h-64 md:h-full min-h-[300px] bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden">
-                   <div className="absolute w-3 h-3 bg-green-500 rounded-full top-1/4 left-1/4 animate-ping" />
-                   <div className="absolute w-3 h-3 bg-red-500 rounded-full bottom-1/3 right-1/3 animate-ping delay-75" />
-                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-                   <Layers className="w-24 h-24 text-white/20 group-hover:text-cyan-500/50 group-hover:scale-110 transition-all duration-500" />
+                
+                {/* Visual Representation (Generated System Graphic) */}
+                <div className="relative h-64 md:h-full min-h-[300px] bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-cyan-500/30 transition-colors">
+                   
+                   {/* Background Grid Effect */}
+                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
+                   
+                   {/* Abstract Nodes (Pulsing dots) */}
+                   <div className="absolute w-2 h-2 bg-green-500 rounded-full top-1/3 left-1/4 animate-ping" />
+                   <div className="absolute w-2 h-2 bg-red-500 rounded-full bottom-1/3 right-1/4 animate-ping delay-75" />
+                   
+                   {/* THE GENERATED LOGO */}
+                   <div className="relative z-10 flex flex-col items-center justify-center">
+                     {/* Trash Bin + Signal Composite */}
+                     <div className="relative">
+                        <Trash2 className="w-32 h-32 text-gray-600 group-hover:text-cyan-500 transition-colors duration-500" strokeWidth={1} />
+                        <Wifi className="absolute -top-6 -right-6 w-16 h-16 text-purple-500 animate-pulse drop-shadow-[0_0_10px_rgba(189,0,255,0.8)]" strokeWidth={3} />
+                     </div>
+                     <span className="mt-4 font-mono text-xs text-cyan-500 tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                       // LIVE_DATA_STREAM
+                     </span>
+                   </div>
                 </div>
               </div>
             </motion.div>
