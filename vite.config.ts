@@ -7,8 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  // Removed Replit-specific plugins causing errors
-  plugins: [react()],
+  plugins: [react()], // <--- Cleaned: No Replit plugins here
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
