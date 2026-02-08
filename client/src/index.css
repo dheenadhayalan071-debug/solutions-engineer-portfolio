@@ -5,111 +5,33 @@
 @tailwind utilities;
 
 :root {
-  /* --- CYBER-DARK PALETTE --- */
-  
-  /* Deep Void Black #050505 */
-  --background: 0 0% 2%;
-  /* Soft Gray #e0e0e0 */
-  --foreground: 0 0% 88%;
-  
-  /* Neon Cyan #00f3ff */
-  --primary: 183 100% 50%;
-  --primary-foreground: 0 0% 0%;
-  
-  /* Electric Purple #bc13fe */
-  --secondary: 286 99% 54%;
-  --secondary-foreground: 0 0% 100%;
-  
-  /* Glass/Muted Elements */
-  --muted: 0 0% 10%;
-  --muted-foreground: 0 0% 60%;
-  
-  --card: 0 0% 4%;
-  --card-foreground: 0 0% 90%;
-  
-  --popover: 0 0% 4%;
-  --popover-foreground: 0 0% 90%;
-  
-  --border: 0 0% 20%;
-  --input: 0 0% 20%;
-  
-  --ring: 183 100% 50%; /* Focus rings are Cyan */
-  
-  --radius: 0.5rem;
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --radius: 0.75rem;
 }
 
-html {
-  scroll-behavior: smooth;
-  background-color: #050505; /* Ensures no white flash on load */
+body {
+  @apply bg-background text-foreground antialiased font-sans overflow-x-hidden;
+  /* Massive readability boost */
+  background-color: #030014;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(189, 0, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 243, 255, 0.15) 0px, transparent 50%);
 }
 
-@layer base {
-  body {
-    @apply bg-background text-foreground antialiased font-sans overflow-x-hidden;
-    /* Custom Selection Color */
-    ::selection {
-      @apply bg-cyan-500/30 text-cyan-50 text-shadow-cyan;
-    }
-  }
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { @apply bg-[#030014]; }
+::-webkit-scrollbar-thumb { @apply bg-cyan-500/50 rounded-full hover:bg-cyan-400; }
 
-  /* --- TYPOGRAPHY --- */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-wider uppercase;
-  }
+/* Selection */
+::selection { @apply bg-cyan-500/30 text-white; }
 
-  h1 {
-    @apply text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-purple-500 animate-gradient-x;
-  }
+/* Typography Override for Visibility */
+h1, h2, h3 { @apply font-display tracking-wider uppercase text-white; }
+p, li { @apply font-medium text-gray-300; } /* Thicker font for readability */
 
-  h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-8 border-l-4 border-cyan-500 pl-4;
-  }
-
-  p {
-    @apply mb-4 leading-relaxed text-gray-400 font-light text-lg;
-  }
-}
-
-@layer utilities {
-  /* --- CUSTOM EFFECTS --- */
-  
-  /* Neon Text Shadow */
-  .text-shadow-cyan {
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
-  }
-  
-  .text-shadow-purple {
-    text-shadow: 0 0 10px rgba(188, 19, 254, 0.5), 0 0 20px rgba(188, 19, 254, 0.3);
-  }
-
-  /* CRT Scanline Overlay */
-  .scanlines {
-    background: linear-gradient(
-      to bottom,
-      rgba(255,255,255,0),
-      rgba(255,255,255,0) 50%,
-      rgba(0,0,0,0.2) 50%,
-      rgba(0,0,0,0.2)
-    );
-    background-size: 100% 4px;
-    position: fixed;
-    pointer-events: none;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    opacity: 0.15;
-  }
-
-  /* Scrollbar Customization */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    @apply bg-[#0a0a0a];
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-cyan-900 rounded-full hover:bg-cyan-600 transition-colors;
-  }
+/* Utility for the Spotlight */
+.spotlight-card:hover {
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
 }
